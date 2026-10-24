@@ -1,29 +1,41 @@
-# Welcome to your Lovable project
+# OilWatch AI — hackathon prototype
 
-This project was built with [Lovable](https://lovable.dev).
+> **DEMO DATA — simulated scenario, not real incidents.**
 
-## Build with Lovable
+A software platform that coordinates detection and cleanup of oil spills on the Caspian Sea (Kazakhstan sector).
+It orchestrates a client's existing response assets (boats, skimmer robots, drones). It does not sell hardware.
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+## Structure (frontend + backend in one full-stack app)
+| Part | Where | What it does |
+|---|---|---|
+| Backend logic | `src/lib/oilwatch/logic.ts` | Volume, priority score, haversine, dispatch, economics |
+| Backend state | `src/lib/oilwatch/store.ts` | In-memory demo data, seeded on start |
+| REST API | `src/routes/api/*` | Endpoints below (CORS enabled) |
+| Frontend API client | `src/lib/api.ts` | Reads `VITE_API_URL`, fetches everything from the API |
+| Pages | `src/routes/*.tsx` | Dashboard, incident, detection, economics, about |
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+The platform uses TanStack Start (React + server routes) instead of a separate Express server: the
+backend endpoints are real HTTP REST endpoints served by the same deployment, so a single deploy works.
 
-## Development
+### REST endpoints
+`GET /api/health`, `GET /api/incidents`, `GET /api/incidents/:id`, `POST /api/incidents`,
+`POST /api/incidents/:id/assign`, `POST /api/incidents/:id/advance`, `GET /api/assets`,
+`POST /api/analyze`, `GET /api/report/:id`
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+## Formulas
+- Volume (t) = area_km² × 1,000,000 × thickness (0.0001 m) × 850 / 1000
+- Priority = 50 × area/5km² + 30 × (1 − distance to nearest sensitive point / 150 km) + 20 × hours/24
+- Dispatch: available assets with capacity > 0 → lowest ETA (haversine distance / speed) that covers the volume;
+  otherwise lowest ETA + "needs additional assets".
 
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+## Run locally
+```bash
+bun install
+bun run dev        # http://localhost:8080
+bunx vitest run    # logic tests
 ```
 
-## Built with
-
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
+## Deploy
+- Easiest: press **Publish** in Lovable → public URL, no login.
+- Self-host: see https://docs.lovable.dev/tips-tricks/self-hosting (Cloudflare Workers free tier works).
+- Note: state is in memory, so it resets when the server restarts (fine for a demo).
