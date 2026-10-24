@@ -8,10 +8,10 @@ import { Label } from "@/components/ui/label";
 export const Route = createFileRoute("/economics")({
   head: () => ({
     meta: [
-      { title: "Экономика — OilWatch AI" },
-      { name: "description", content: "Калькулятор юнит-экономики OilWatch AI: маржа, LTV, LTV/CAC, окупаемость." },
-      { property: "og:title", content: "Экономика — OilWatch AI" },
-      { property: "og:description", content: "Калькулятор юнит-экономики в тенге." },
+      { title: "Economics — OilWatch AI" },
+      { name: "description", content: "OilWatch AI unit economics calculator: margin, LTV, LTV/CAC, payback." },
+      { property: "og:title", content: "Economics — OilWatch AI" },
+      { property: "og:description", content: "Unit economics calculator in KZT." },
     ],
   }),
   component: Economics,
@@ -30,26 +30,26 @@ function Economics() {
   );
   return (
     <div className="max-w-3xl space-y-4">
-      <h1 className="text-xl font-bold">Юнит-экономика</h1>
+      <h1 className="text-xl font-bold">Unit economics</h1>
       <div className="grid gap-3 rounded-lg border bg-card p-4 sm:grid-cols-2">
-        {field("price", "Цена на клиента в год, KZT")}
-        {field("unitCost", "Себестоимость в год, KZT")}
-        {field("cac", "CAC (стоимость привлечения), KZT")}
-        {field("years", "Срок удержания, лет")}
+        {field("price", "Price per client per year, KZT")}
+        {field("unitCost", "Annual unit cost, KZT")}
+        {field("cac", "CAC (customer acquisition cost), KZT")}
+        {field("years", "Retention period, years")}
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
-        <Out l="Маржа в год" v={`${kzt(r.margin)} (${r.marginPct.toFixed(0)}%)`} />
+        <Out l="Annual margin" v={`${kzt(r.margin)} (${r.marginPct.toFixed(0)}%)`} />
         <Out l="LTV" v={kzt(r.ltv)} />
         <div className="rounded-lg border bg-card p-3">
           <div className="text-xs text-muted-foreground">LTV / CAC</div>
           <div className="mt-1 flex items-center gap-2 text-2xl font-bold">
             {r.ltvCac.toFixed(2)}
-            <span className={`rounded-full px-2 py-0.5 text-xs ${r.healthy ? "bg-ok text-primary-foreground" : "bg-critical text-destructive-foreground"}`}>{r.healthy ? "≥ 3 — хорошо" : "< 3 — слабо"}</span>
+            <span className={`rounded-full px-2 py-0.5 text-xs ${r.healthy ? "bg-ok text-primary-foreground" : "bg-critical text-destructive-foreground"}`}>{r.healthy ? "≥ 3 — healthy" : "< 3 — weak"}</span>
           </div>
         </div>
-        <Out l="Окупаемость CAC" v={Number.isFinite(r.paybackMonths) ? `${r.paybackMonths.toFixed(1)} мес.` : "не окупается"} />
+        <Out l="CAC payback" v={Number.isFinite(r.paybackMonths) ? `${r.paybackMonths.toFixed(1)} months` : "does not pay back"} />
       </div>
-      <p className="text-sm text-muted-foreground">Допущения, требуют проверки с клиентами (assumptions, to be validated with customers).</p>
+      <p className="text-sm text-muted-foreground">Assumptions, to be validated with customers.</p>
     </div>
   );
 }

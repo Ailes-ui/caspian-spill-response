@@ -3,7 +3,7 @@
 import type { Asset } from "./oilwatch/logic";
 import type { IncidentDTO } from "./oilwatch/store";
 
-export const API_URL = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, "") ?? "";
+export const API_URL = (import.meta.env["VITE_API_URL"] as string | undefined)?.replace(/\/$/, "") ?? "";
 
 async function req<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, {
@@ -11,7 +11,7 @@ async function req<T>(path: string, init?: RequestInit): Promise<T> {
     headers: { "Content-Type": "application/json", ...(init?.headers ?? {}) },
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data?.error ?? `Ошибка ${res.status}`);
+  if (!res.ok) throw new Error(data?.error ?? `Error ${res.status}`);
   return data as T;
 }
 

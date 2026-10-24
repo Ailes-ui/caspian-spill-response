@@ -20,7 +20,7 @@ export const Route = createFileRoute("/api/analyze")({
     handlers: {
       POST: async ({ request }) => {
         const parsed = Body.safeParse(await request.json().catch(() => null));
-        if (!parsed.success) return json({ error: "Некорректные данные" }, 400);
+        if (!parsed.success) return json({ error: "Invalid data" }, 400);
         const { imageId, location } = parsed.data;
         let result;
         if (imageId && PRESETS[imageId]) result = PRESETS[imageId];
@@ -28,7 +28,7 @@ export const Route = createFileRoute("/api/analyze")({
           // Pseudo-random but deterministic values derived from the clicked point
           const seed = Math.abs(Math.sin(location[0] * 12.9898 + location[1] * 78.233)) % 1;
           result = { coords: location, areaKm2: +(0.2 + seed * 3).toFixed(2), confidence: +(0.7 + seed * 0.27).toFixed(2) };
-        } else return json({ error: "Выберите изображение или точку на карте" }, 400);
+        } else return json({ error: "Choose an image or a point on the map" }, 400);
         return json({ ...result, simulated: true, label: "simulated analysis (demo)" });
       },
       OPTIONS: async () => preflight(),
