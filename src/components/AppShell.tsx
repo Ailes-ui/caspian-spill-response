@@ -4,16 +4,16 @@ import { Info, LayoutDashboard, Radar, Calculator, Droplets } from "lucide-react
 import type { ReactNode } from "react";
 
 const NAV = [
-  { to: "/", label: "Панель", icon: LayoutDashboard },
-  { to: "/detect", label: "Новая детекция", icon: Radar },
-  { to: "/economics", label: "Экономика", icon: Calculator },
-  { to: "/about", label: "О платформе", icon: Info },
+  { to: "/", label: "Dashboard", icon: LayoutDashboard },
+  { to: "/detect", label: "New detection", icon: Radar },
+  { to: "/economics", label: "Economics", icon: Calculator },
+  { to: "/about", label: "About", icon: Info },
 ] as const;
 
 export function DemoBanner() {
   return (
     <div role="status" className="sticky top-0 z-[1000] bg-banner px-3 py-1.5 text-center text-xs font-semibold text-banner-foreground">
-      DEMO DATA — simulated scenario, not real incidents · ДЕМО: смоделированный сценарий, не реальные инциденты
+      DEMO DATA — simulated scenario, not real incidents
     </div>
   );
 }
@@ -41,7 +41,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               </Link>
             ))}
           </nav>
-          <p className="hidden px-4 text-xs opacity-60 md:block">Каспий · сектор Казахстана</p>
+          <p className="hidden px-4 text-xs opacity-60 md:block">Caspian Sea · Kazakhstan sector</p>
         </aside>
         <main className="min-w-0 flex-1 p-3 md:p-5">{children}</main>
       </div>

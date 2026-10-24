@@ -48,10 +48,10 @@ export const ASSUMPTIONS = {
 
 // Hardcoded sensitive points: protected zones and coastline (illustrative).
 export const SENSITIVE_POINTS: { name: string; coords: LatLng }[] = [
-  { name: "Дельта Урала (заповедная зона)", coords: [46.95, 51.7] },
-  { name: "Северо-Каспийская заповедная зона", coords: [46.4, 50.2] },
-  { name: "Побережье Мангистау (Баутино)", coords: [44.55, 50.27] },
-  { name: "Побережье Актау", coords: [43.65, 51.17] },
+  { name: "Ural Delta (protected zone)", coords: [46.95, 51.7] },
+  { name: "North Caspian protected zone", coords: [46.4, 50.2] },
+  { name: "Mangystau coast (Bautino)", coords: [44.55, 50.27] },
+  { name: "Aktau coast", coords: [43.65, 51.17] },
 ];
 
 /** Great-circle distance between two points in km (haversine formula). */
@@ -112,13 +112,13 @@ export function chooseAsset(incident: Incident, assets: Asset[]) {
   const pick = fitting ?? candidates[0];
   const needsAdditionalAssets = !fitting;
   const reasoning =
-    `Рассмотрено доступных средств: ${candidates.length}. ` +
-    `Выбрано «${pick.asset.name}»: расстояние ${pick.distanceKm.toFixed(1)} км, ` +
-    `скорость ${pick.asset.speedKmh} км/ч, ETA ${(pick.etaHours * 60).toFixed(0)} мин, ` +
-    `вместимость ${pick.asset.capacityT} т при объёме ${volume.toFixed(1)} т. ` +
+    `Considered available assets: ${candidates.length}. ` +
+    `Selected "${pick.asset.name}": distance ${pick.distanceKm.toFixed(1)} km, ` +
+    `speed ${pick.asset.speedKmh} km/h, ETA ${(pick.etaHours * 60).toFixed(0)} min, ` +
+    `capacity ${pick.asset.capacityT} t vs volume ${volume.toFixed(1)} t. ` +
     (needsAdditionalAssets
-      ? "Ни одно средство не покрывает объём — требуются дополнительные средства."
-      : "Это самое быстрое средство, вместимость которого покрывает объём.");
+      ? "No single asset covers the volume — additional assets required."
+      : "This is the fastest asset whose capacity covers the volume.");
   return { ...pick, needsAdditionalAssets, reasoning, volume };
 }
 
@@ -131,18 +131,18 @@ export const NEXT_STATUS: Record<IncidentStatus, IncidentStatus | null> = {
 };
 
 export const STATUS_LABEL: Record<IncidentStatus, string> = {
-  detected: "Обнаружен",
-  assigned: "Назначен",
-  en_route: "В пути",
-  recovering: "Сбор нефти",
-  resolved: "Устранён",
+  detected: "Detected",
+  assigned: "Assigned",
+  en_route: "En route",
+  recovering: "Recovering",
+  resolved: "Resolved",
 };
 
 export const ASSET_STATUS_LABEL: Record<AssetStatus, string> = {
-  available: "Доступен",
-  en_route: "В пути",
-  recovering: "Сбор",
-  returning: "Возвращается",
+  available: "Available",
+  en_route: "En route",
+  recovering: "Recovering",
+  returning: "Returning",
 };
 
 /** Unit economics for the pitch calculator. */
