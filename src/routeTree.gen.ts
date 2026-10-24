@@ -10,33 +10,138 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiAnalyzeRouteImport } from './routes/api/analyze'
+import { Route as ApiAssetsRouteImport } from './routes/api/assets'
+import { Route as ApiHealthRouteImport } from './routes/api/health'
+import { Route as ApiIncidentsRouteImport } from './routes/api/incidents'
+import { Route as ApiIncidentsIdRouteImport } from './routes/api/incidents.$id'
+import { Route as ApiReportIdRouteImport } from './routes/api/report.$id'
+import { Route as ApiIncidentsIdAdvanceRouteImport } from './routes/api/incidents.$id.advance'
+import { Route as ApiIncidentsIdAssignRouteImport } from './routes/api/incidents.$id.assign'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAnalyzeRoute = ApiAnalyzeRouteImport.update({
+  id: '/api/analyze',
+  path: '/api/analyze',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAssetsRoute = ApiAssetsRouteImport.update({
+  id: '/api/assets',
+  path: '/api/assets',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiHealthRoute = ApiHealthRouteImport.update({
+  id: '/api/health',
+  path: '/api/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiIncidentsRoute = ApiIncidentsRouteImport.update({
+  id: '/api/incidents',
+  path: '/api/incidents',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiIncidentsIdRoute = ApiIncidentsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiIncidentsRoute,
+} as any)
+const ApiReportIdRoute = ApiReportIdRouteImport.update({
+  id: '/api/report/$id',
+  path: '/api/report/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiIncidentsIdAdvanceRoute = ApiIncidentsIdAdvanceRouteImport.update({
+  id: '/advance',
+  path: '/advance',
+  getParentRoute: () => ApiIncidentsIdRoute,
+} as any)
+const ApiIncidentsIdAssignRoute = ApiIncidentsIdAssignRouteImport.update({
+  id: '/assign',
+  path: '/assign',
+  getParentRoute: () => ApiIncidentsIdRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/analyze': typeof ApiAnalyzeRoute
+  '/api/assets': typeof ApiAssetsRoute
+  '/api/health': typeof ApiHealthRoute
+  '/api/incidents': typeof ApiIncidentsRouteWithChildren
+  '/api/incidents/$id': typeof ApiIncidentsIdRouteWithChildren
+  '/api/report/$id': typeof ApiReportIdRoute
+  '/api/incidents/$id/advance': typeof ApiIncidentsIdAdvanceRoute
+  '/api/incidents/$id/assign': typeof ApiIncidentsIdAssignRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/analyze': typeof ApiAnalyzeRoute
+  '/api/assets': typeof ApiAssetsRoute
+  '/api/health': typeof ApiHealthRoute
+  '/api/incidents': typeof ApiIncidentsRouteWithChildren
+  '/api/incidents/$id': typeof ApiIncidentsIdRouteWithChildren
+  '/api/report/$id': typeof ApiReportIdRoute
+  '/api/incidents/$id/advance': typeof ApiIncidentsIdAdvanceRoute
+  '/api/incidents/$id/assign': typeof ApiIncidentsIdAssignRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/analyze': typeof ApiAnalyzeRoute
+  '/api/assets': typeof ApiAssetsRoute
+  '/api/health': typeof ApiHealthRoute
+  '/api/incidents': typeof ApiIncidentsRouteWithChildren
+  '/api/incidents/$id': typeof ApiIncidentsIdRouteWithChildren
+  '/api/report/$id': typeof ApiReportIdRoute
+  '/api/incidents/$id/advance': typeof ApiIncidentsIdAdvanceRoute
+  '/api/incidents/$id/assign': typeof ApiIncidentsIdAssignRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/api/analyze'
+    | '/api/assets'
+    | '/api/health'
+    | '/api/incidents'
+    | '/api/incidents/$id'
+    | '/api/report/$id'
+    | '/api/incidents/$id/advance'
+    | '/api/incidents/$id/assign'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/api/analyze'
+    | '/api/assets'
+    | '/api/health'
+    | '/api/incidents'
+    | '/api/incidents/$id'
+    | '/api/report/$id'
+    | '/api/incidents/$id/advance'
+    | '/api/incidents/$id/assign'
+  id:
+    | '__root__'
+    | '/'
+    | '/api/analyze'
+    | '/api/assets'
+    | '/api/health'
+    | '/api/incidents'
+    | '/api/incidents/$id'
+    | '/api/report/$id'
+    | '/api/incidents/$id/advance'
+    | '/api/incidents/$id/assign'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiAnalyzeRoute: typeof ApiAnalyzeRoute
+  ApiAssetsRoute: typeof ApiAssetsRoute
+  ApiHealthRoute: typeof ApiHealthRoute
+  ApiIncidentsRoute: typeof ApiIncidentsRouteWithChildren
+  ApiReportIdRoute: typeof ApiReportIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +153,98 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/analyze': {
+      id: '/api/analyze'
+      path: '/api/analyze'
+      fullPath: '/api/analyze'
+      preLoaderRoute: typeof ApiAnalyzeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/assets': {
+      id: '/api/assets'
+      path: '/api/assets'
+      fullPath: '/api/assets'
+      preLoaderRoute: typeof ApiAssetsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/health': {
+      id: '/api/health'
+      path: '/api/health'
+      fullPath: '/api/health'
+      preLoaderRoute: typeof ApiHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/incidents': {
+      id: '/api/incidents'
+      path: '/api/incidents'
+      fullPath: '/api/incidents'
+      preLoaderRoute: typeof ApiIncidentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/incidents/$id': {
+      id: '/api/incidents/$id'
+      path: '/$id'
+      fullPath: '/api/incidents/$id'
+      preLoaderRoute: typeof ApiIncidentsIdRouteImport
+      parentRoute: typeof ApiIncidentsRoute
+    }
+    '/api/report/$id': {
+      id: '/api/report/$id'
+      path: '/api/report/$id'
+      fullPath: '/api/report/$id'
+      preLoaderRoute: typeof ApiReportIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/incidents/$id/advance': {
+      id: '/api/incidents/$id/advance'
+      path: '/advance'
+      fullPath: '/api/incidents/$id/advance'
+      preLoaderRoute: typeof ApiIncidentsIdAdvanceRouteImport
+      parentRoute: typeof ApiIncidentsIdRoute
+    }
+    '/api/incidents/$id/assign': {
+      id: '/api/incidents/$id/assign'
+      path: '/assign'
+      fullPath: '/api/incidents/$id/assign'
+      preLoaderRoute: typeof ApiIncidentsIdAssignRouteImport
+      parentRoute: typeof ApiIncidentsIdRoute
+    }
   }
 }
 
+interface ApiIncidentsIdRouteChildren {
+  ApiIncidentsIdAdvanceRoute: typeof ApiIncidentsIdAdvanceRoute
+  ApiIncidentsIdAssignRoute: typeof ApiIncidentsIdAssignRoute
+}
+
+const ApiIncidentsIdRouteChildren: ApiIncidentsIdRouteChildren = {
+  ApiIncidentsIdAdvanceRoute: ApiIncidentsIdAdvanceRoute,
+  ApiIncidentsIdAssignRoute: ApiIncidentsIdAssignRoute,
+}
+
+const ApiIncidentsIdRouteWithChildren = ApiIncidentsIdRoute._addFileChildren(
+  ApiIncidentsIdRouteChildren,
+)
+
+interface ApiIncidentsRouteChildren {
+  ApiIncidentsIdRoute: typeof ApiIncidentsIdRouteWithChildren
+}
+
+const ApiIncidentsRouteChildren: ApiIncidentsRouteChildren = {
+  ApiIncidentsIdRoute: ApiIncidentsIdRouteWithChildren,
+}
+
+const ApiIncidentsRouteWithChildren = ApiIncidentsRoute._addFileChildren(
+  ApiIncidentsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiAnalyzeRoute: ApiAnalyzeRoute,
+  ApiAssetsRoute: ApiAssetsRoute,
+  ApiHealthRoute: ApiHealthRoute,
+  ApiIncidentsRoute: ApiIncidentsRouteWithChildren,
+  ApiReportIdRoute: ApiReportIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
