@@ -66,7 +66,7 @@ function Dashboard() {
           </ul>
         </section>
         <div className="order-1 h-[380px] lg:order-2 lg:h-[600px]">
-          <LazyMap incidents={inc.data?.incidents} assets={assets.data} onIncidentClick={open} />
+          <LazyMap incidents={inc.data?.incidents ?? []} assets={assets.data ?? []} onIncidentClick={open} />
         </div>
         <section className="order-3 rounded-lg border bg-card">
           <h2 className="border-b px-3 py-2 text-sm font-semibold">Response assets</h2>

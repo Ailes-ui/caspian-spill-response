@@ -72,7 +72,7 @@ export function estimateVolumeT(areaKm2: number, thicknessM = ASSUMPTIONS.thickn
 /** Priority 0-100 = 50*area + 30*sensitivity + 20*age, each part normalized 0..1. */
 export function priorityScore(inc: Pick<Incident, "areaKm2" | "coords" | "detectedAt">, now: number) {
   const areaN = Math.min(inc.areaKm2 / ASSUMPTIONS.maxAreaKm2, 1);
-  let nearest = SENSITIVE_POINTS[0];
+  let nearest = SENSITIVE_POINTS[0]!;
   let minD = Infinity;
   for (const p of SENSITIVE_POINTS) {
     const d = haversineKm(inc.coords, p.coords);
@@ -109,7 +109,7 @@ export function chooseAsset(incident: Incident, assets: Asset[]) {
     .sort((x, y) => x.etaHours - y.etaHours);
   if (candidates.length === 0) return null;
   const fitting = candidates.find((c) => c.asset.capacityT >= volume);
-  const pick = fitting ?? candidates[0];
+  const pick = fitting ?? candidates[0]!;
   const needsAdditionalAssets = !fitting;
   const reasoning =
     `Considered available assets: ${candidates.length}. ` +
