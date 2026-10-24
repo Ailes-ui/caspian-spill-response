@@ -50,7 +50,7 @@ export default function MapView({
       // circle radius approximates slick area (demo scale)
       L.circle(inc.coords, { radius: Math.sqrt(inc.areaKm2 / Math.PI) * 1000 * 4, color: c, fillOpacity: 0.25, weight: 1 }).addTo(g);
       L.circleMarker(inc.coords, { radius: 8, color: c, fillColor: c, fillOpacity: 0.9, weight: 2 })
-        .bindTooltip(`${inc.id} · приоритет ${inc.priority.total}`)
+        .bindTooltip(`${inc.id} · priority ${inc.priority.total}`)
         .on("click", (e) => { L.DomEvent.stopPropagation(e); onIncidentClick?.(inc.id); })
         .addTo(g);
     }

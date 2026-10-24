@@ -13,8 +13,8 @@ function seed(): State {
   const mk = (id: string, coords: [number, number], areaKm2: number, source: "drone" | "satellite", hoursAgo: number): Incident => ({
     id, coords, areaKm2, source, detectedAt: now - hoursAgo * h, registeredAt: now, status: "detected",
     assetId: null, assignedAt: null, etaHours: null, needsAdditionalAssets: false, reasoning: null,
-    timeline: [{ status: "detected", at: now - hoursAgo * h, note: `Обнаружено (${source === "drone" ? "дрон" : "спутник"})` }],
-    log: ["[DEMO] Инцидент зарегистрирован в системе"],
+    timeline: [{ status: "detected", at: now - hoursAgo * h, note: `Detected (${source === "drone" ? "drone" : "satellite"})` }],
+    log: ["[DEMO] Incident registered in the system"],
   });
   const asset = (id: string, name: string, kind: Asset["kind"], base: [number, number], baseName: string, speedKmh: number, capacityT: number): Asset =>
     ({ id, name, kind, base, baseName, speedKmh, capacityT, status: "available", incidentId: null, returnAt: null });
@@ -27,11 +27,11 @@ function seed(): State {
       mk("INC-005", [44.9, 51.3], 0.3, "drone", 1),
     ],
     assets: [
-      asset("A", "Скиммер-судно A", "vessel", [47.1, 51.9], "Атырау", 18, 40),
-      asset("B", "Скиммер-судно B", "vessel", [44.55, 50.27], "Баутино", 20, 30),
-      asset("R1", "Автономный робот-скиммер R1", "robot", [44.55, 50.27], "Баутино", 8, 5),
-      asset("D1", "Дрон-разведчик D1", "drone", [43.65, 51.17], "Актау", 60, 0),
-      asset("D2", "Дрон-разведчик D2", "drone", [47.1, 51.9], "Атырау", 60, 0),
+      asset("A", "Skimmer vessel A", "vessel", [47.1, 51.9], "Atyrau", 18, 40),
+      asset("B", "Skimmer vessel B", "vessel", [44.55, 50.27], "Bautino", 20, 30),
+      asset("R1", "Autonomous skimmer robot R1", "robot", [44.55, 50.27], "Bautino", 8, 5),
+      asset("D1", "Recon drone D1", "drone", [43.65, 51.17], "Aktau", 60, 0),
+      asset("D2", "Recon drone D2", "drone", [47.1, 51.9], "Atyrau", 60, 0),
     ],
   };
 }
@@ -68,8 +68,8 @@ export function createIncident(data: { coords: [number, number]; areaKm2: number
   const inc: Incident = {
     id, coords: data.coords, areaKm2: data.areaKm2, source: data.source, detectedAt: now, registeredAt: now,
     status: "detected", assetId: null, assignedAt: null, etaHours: null, needsAdditionalAssets: false, reasoning: null,
-    timeline: [{ status: "detected", at: now, note: "Создано из симулированного анализа (демо)" }],
-    log: ["[DEMO] Инцидент создан из новой детекции"],
+    timeline: [{ status: "detected", at: now, note: "Created from simulated analysis (demo)" }],
+    log: ["[DEMO] Incident created from a new detection"],
   };
   s.incidents.push(inc);
   return enrich(inc);
@@ -78,10 +78,10 @@ export function createIncident(data: { coords: [number, number]; areaKm2: number
 export function assignBest(id: string) {
   const s = getState();
   const inc = s.incidents.find((i) => i.id === id);
-  if (!inc) return { error: "Инцидент не найден", status: 404 } as const;
-  if (inc.status !== "detected") return { error: "Средство уже назначено", status: 409 } as const;
+  if (!inc) return { error: "Incident not found", status: 404 } as const;
+  if (inc.status !== "detected") return { error: "Asset already assigned", status: 409 } as const;
   const choice = chooseAsset(inc, s.assets);
-  if (!choice) return { error: "Нет доступных средств со вместимостью > 0", status: 409 } as const;
+  if (!choice) return { error: "No available assets with capacity > 0", status: 409 } as const;
   const now = Date.now();
   inc.status = "assigned";
   inc.assetId = choice.asset.id;
@@ -89,9 +89,9 @@ export function assignBest(id: string) {
   inc.etaHours = choice.etaHours;
   inc.needsAdditionalAssets = choice.needsAdditionalAssets;
   inc.reasoning = choice.reasoning;
-  inc.timeline.push({ status: "assigned", at: now, note: `Назначено: ${choice.asset.name}` });
-  inc.log.push(`Назначено ${choice.asset.name}, ETA ${(choice.etaHours * 60).toFixed(0)} мин`);
-  if (choice.needsAdditionalAssets) inc.log.push("⚠ Требуются дополнительные средства");
+  inc.timeline.push({ status: "assigned", at: now, note: `Assigned: ${choice.asset.name}` });
+  inc.log.push(`Assigned ${choice.asset.name}, ETA ${(choice.etaHours * 60).toFixed(0)} min`);
+  if (choice.needsAdditionalAssets) inc.log.push("⚠ Additional assets required");
   choice.asset.status = "en_route";
   choice.asset.incidentId = inc.id;
   return { incident: enrich(inc), asset: choice.asset, etaHours: choice.etaHours, reasoning: choice.reasoning, needsAdditionalAssets: choice.needsAdditionalAssets };
@@ -100,9 +100,9 @@ export function assignBest(id: string) {
 export function advance(id: string) {
   const s = getState();
   const inc = s.incidents.find((i) => i.id === id);
-  if (!inc) return { error: "Инцидент не найден", status: 404 } as const;
+  if (!inc) return { error: "Incident not found", status: 404 } as const;
   const next = NEXT_STATUS[inc.status];
-  if (!next) return { error: inc.status === "detected" ? "Сначала назначьте средство" : "Инцидент уже устранён", status: 409 } as const;
+  if (!next) return { error: inc.status === "detected" ? "Assign an asset first" : "Incident already resolved", status: 409 } as const;
   const asset = s.assets.find((a) => a.id === inc.assetId);
   const now = Date.now();
   inc.status = next;
@@ -115,10 +115,10 @@ export function advance(id: string) {
       asset.returnAt = now + 30_000; // back to base after 30 s (demo)
       asset.incidentId = null;
       const recovered = Math.min(estimateVolumeT(inc.areaKm2), asset.capacityT);
-      inc.log.push(`Операция завершена. Оценочно собрано ${recovered.toFixed(1)} т (симуляция)`);
+      inc.log.push(`Operation complete. Estimated recovered ${recovered.toFixed(1)} t (simulation)`);
     }
   }
-  inc.log.push(`Статус → ${STATUS_LABEL[next]}`);
+  inc.log.push(`Status → ${STATUS_LABEL[next]}`);
   return { incident: enrich(inc), asset };
 }
 

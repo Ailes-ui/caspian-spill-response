@@ -8,7 +8,7 @@ export const Route = createFileRoute("/api/incidents/$id")({
     handlers: {
       GET: async ({ params }) => {
         const inc = getIncident(params.id);
-        return inc ? json(inc) : json({ error: "Не найдено" }, 404);
+        return inc ? json(inc) : json({ error: "Not found" }, 404);
       },
       OPTIONS: async () => preflight(),
     },

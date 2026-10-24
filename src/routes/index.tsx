@@ -9,10 +9,10 @@ import { AssetChip, IncidentChip, PriorityBadge } from "@/components/StatusChip"
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Панель управления — OilWatch AI" },
-      { name: "description", content: "Карта инцидентов и средств реагирования на Северном Каспии (демо-данные)." },
-      { property: "og:title", content: "Панель управления — OilWatch AI" },
-      { property: "og:description", content: "Карта инцидентов и средств реагирования на Северном Каспии (демо-данные)." },
+      { title: "Dashboard — OilWatch AI" },
+      { name: "description", content: "Map of incidents and response assets in the North Caspian (demo data)." },
+      { property: "og:title", content: "Dashboard — OilWatch AI" },
+      { property: "og:description", content: "Map of incidents and response assets in the North Caspian (demo data)." },
     ],
   }),
   component: Dashboard,
@@ -40,21 +40,21 @@ function Dashboard() {
   return (
     <div className="space-y-3">
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <Kpi label="Активные инциденты" value={k ? String(k.activeIncidents) : "…"} tone="text-critical" />
-        <Kpi label="Доступные средства" value={k ? String(k.availableAssets) : "…"} tone="text-ok" />
-        <Kpi label="Ср. время назначения, сек" value={k ? (k.avgAssignmentSec ?? "—").toString() : "…"} tone="text-foreground" />
-        <Kpi label="Объём в сборе (оценка), т" value={k ? k.volumeInRecoveryT.toString() : "…"} tone="text-info" />
+        <Kpi label="Active incidents" value={k ? String(k.activeIncidents) : "…"} tone="text-critical" />
+        <Kpi label="Available assets" value={k ? String(k.availableAssets) : "…"} tone="text-ok" />
+        <Kpi label="Avg. assignment time, s" value={k ? (k.avgAssignmentSec ?? "—").toString() : "…"} tone="text-foreground" />
+        <Kpi label="Volume in recovery (est.), t" value={k ? k.volumeInRecoveryT.toString() : "…"} tone="text-info" />
       </div>
       <div className="grid gap-3 lg:grid-cols-[280px_1fr_260px]">
         <section className="order-2 rounded-lg border bg-card lg:order-1">
-          <h2 className="border-b px-3 py-2 text-sm font-semibold">Инциденты (по приоритету)</h2>
+          <h2 className="border-b px-3 py-2 text-sm font-semibold">Incidents (by priority)</h2>
           <ul className="max-h-[560px] divide-y overflow-auto">
             {inc.data?.incidents.map((i) => (
               <li key={i.id}>
                 <Link to="/incidents/$id" params={{ id: i.id }} className="flex items-center justify-between gap-2 px-3 py-2 hover:bg-muted">
                   <div>
                     <div className="text-sm font-semibold">{i.id}</div>
-                    <div className="text-xs text-muted-foreground">{i.areaKm2} км² · {i.volumeT} т · {i.source === "drone" ? "дрон" : "спутник"}</div>
+                    <div className="text-xs text-muted-foreground">{i.areaKm2} km² · {i.volumeT} t · {i.source === "drone" ? "drone" : "satellite"}</div>
                   </div>
                   <div className="flex flex-col items-end gap-1">
                     <PriorityBadge score={i.priority.total} />
@@ -69,7 +69,7 @@ function Dashboard() {
           <LazyMap incidents={inc.data?.incidents} assets={assets.data} onIncidentClick={open} />
         </div>
         <section className="order-3 rounded-lg border bg-card">
-          <h2 className="border-b px-3 py-2 text-sm font-semibold">Средства реагирования</h2>
+          <h2 className="border-b px-3 py-2 text-sm font-semibold">Response assets</h2>
           <ul className="divide-y">
             {assets.data?.map((a) => (
               <li key={a.id} className="px-3 py-2">
@@ -78,7 +78,7 @@ function Dashboard() {
                   <AssetChip status={a.status} />
                 </div>
                 <div className="text-xs text-muted-foreground">
-                  {a.baseName} · {a.speedKmh} км/ч · {a.capacityT > 0 ? `${a.capacityT} т` : "только разведка"}
+                  {a.baseName} · {a.speedKmh} km/h · {a.capacityT > 0 ? `${a.capacityT} t` : "recon only"}
                   {a.incidentId && ` · → ${a.incidentId}`}
                 </div>
               </li>

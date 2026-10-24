@@ -11,7 +11,7 @@ async function req<T>(path: string, init?: RequestInit): Promise<T> {
     headers: { "Content-Type": "application/json", ...(init?.headers ?? {}) },
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data?.error ?? `Ошибка ${res.status}`);
+  if (!res.ok) throw new Error(data?.error ?? `Error ${res.status}`);
   return data as T;
 }
 

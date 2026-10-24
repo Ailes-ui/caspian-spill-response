@@ -17,7 +17,7 @@ export const Route = createFileRoute("/api/incidents")({
       GET: async () => json({ incidents: listIncidents(), kpis: kpis() }),
       POST: async ({ request }) => {
         const parsed = Body.safeParse(await request.json().catch(() => null));
-        if (!parsed.success) return json({ error: "Некорректные данные" }, 400);
+        if (!parsed.success) return json({ error: "Invalid data" }, 400);
         return json(createIncident(parsed.data), 201);
       },
       OPTIONS: async () => preflight(),
