@@ -34,7 +34,7 @@ function Dashboard() {
   const assets = useQuery({ queryKey: ["assets"], queryFn: api.assets, refetchInterval: 3000 });
   const open = useCallback((id: string) => navigate({ to: "/incidents/$id", params: { id } }), [navigate]);
 
-  if (inc.error || assets.error) return <p className="text-critical">Не удалось связаться с сервером: {String(inc.error ?? assets.error)}</p>;
+  if (inc.error || assets.error) return <p className="text-critical">Failed to reach the server: {String(inc.error ?? assets.error)}</p>;
   const k = inc.data?.kpis;
 
   return (

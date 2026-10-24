@@ -33,7 +33,7 @@ function Detect() {
   const analyze = useMutation({ mutationFn: () => api.analyze(imageId ? { imageId } : { location: loc! }) });
   const create = useMutation({
     mutationFn: () => api.create({ coords: analyze.data!.coords, areaKm2: analyze.data!.areaKm2, source: "drone" }),
-    onSuccess: (inc) => { toast.success(`Создан инцидент ${inc.id}`); navigate({ to: "/incidents/$id", params: { id: inc.id } }); },
+    onSuccess: (inc) => { toast.success(`Incident ${inc.id} created`); navigate({ to: "/incidents/$id", params: { id: inc.id } }); },
     onError: (e) => toast.error((e as Error).message),
   });
 
@@ -59,9 +59,9 @@ function Detect() {
           {analyze.data && (
             <div className="rounded-lg border bg-card p-4 text-sm">
               <p className="mb-2 inline-block rounded bg-banner px-2 py-0.5 text-xs font-semibold text-banner-foreground">simulated analysis (demo)</p>
-              <p>Координаты: {analyze.data.coords.join(", ")}</p>
-              <p>Площадь: {analyze.data.areaKm2} км²</p>
-              <p>Уверенность: {(analyze.data.confidence * 100).toFixed(0)}%</p>
+              <p>Coordinates: {analyze.data.coords.join(", ")}</p>
+              <p>Area: {analyze.data.areaKm2} km²</p>
+              <p>Confidence: {(analyze.data.confidence * 100).toFixed(0)}%</p>
               <Button className="mt-3" onClick={() => create.mutate()} disabled={create.isPending}>Create incident</Button>
             </div>
           )}
